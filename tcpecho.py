@@ -44,8 +44,12 @@ def copy_in_to_out(in_conn, out_conn):
                 break
 
         if data is not None and out_conn in w:
-            out_conn.send(data)
-            data = None
+            try:
+                out_conn.sendall(data)
+                data = None
+            except ConnectionError as ex:
+                print("outgoing connection error %s %s" %(ex, type(ex)))
+                break
 
     in_conn.close()
     out_conn.close()
