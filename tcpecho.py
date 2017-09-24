@@ -70,10 +70,6 @@ def main(incoming_port, outgoing_port):
                 out_conn, _ = out_sock.accept()
                 out_conn.setblocking(False)
 
-
-        # TODO: check in in_conn or out_conn have been closed
-        # while waiting for the other end
-
         if in_conn is not None and out_conn is not None:
             runner = lambda : copy_in_to_out(in_conn, out_conn)
             threading.Thread(target=runner).start()
