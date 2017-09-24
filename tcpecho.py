@@ -3,10 +3,7 @@
 import threading
 import socket
 import select
-
-INCOMING_PORT = 2001
-OUTGOING_PORT = 2000
-
+import sys
 
 def init_tcp_socket(port):
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -55,9 +52,9 @@ def copy_in_to_out(in_conn, out_conn):
     out_conn.close()
 
 
-def main():
-    in_sock = init_tcp_socket(INCOMING_PORT)
-    out_sock = init_tcp_socket(OUTGOING_PORT)
+def main(incoming_port, outgoing_port):
+    in_sock = init_tcp_socket(incoming_port)
+    out_sock = init_tcp_socket(outgoing_port)
 
     in_conn = None
     out_conn = None
@@ -82,4 +79,8 @@ def main():
             threading.Thread(target=runner).start()
             in_conn = out_conn = None
 
-main()
+if len(sys.argv) < 3:
+    print("usage %s <incoming port> <outgoing port>" % sys.argv[0])
+    sys.exit(1)
+
+main(int(sys.argv[1]), int(sys.argv[2]))
